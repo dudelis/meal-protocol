@@ -38,7 +38,10 @@ export default function RootLayout({
                   md:max-w-screen-sm
                   md:px-1"
             >
-              {children}
+              <main className="flex min-h-screen flex-col items-center justify-between p-24">
+                {children}
+              </main>
+
               <FooterMenu />
             </div>
           </div>

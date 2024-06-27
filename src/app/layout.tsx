@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import FooterMenu from "@/components/Footer";
 import { ThemeProvider } from "@/providers/theme-provider";
+import { AuthProvider } from "@/providers/auth-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,16 +21,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <Header />
-          <div className="container min-h-full">
+        <AuthProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Header />
+            <div className="container min-h-full">
 
-            <div className="mx-auto 
+              <div className="mx-auto 
                   2xl:mx-w-screen-xl
                   2xl:px-3
                   xl:max-w-screen-lg
@@ -37,15 +39,16 @@ export default function RootLayout({
                   lg:px-2
                   md:max-w-screen-sm
                   md:px-1"
-            >
-              <main className="flex min-h-screen flex-col items-center justify-between p-24">
-                {children}
-              </main>
+              >
+                <main className="flex min-h-screen flex-col items-center justify-between p-24">
+                  {children}
+                </main>
 
-              <FooterMenu />
+                <FooterMenu />
+              </div>
             </div>
-          </div>
-        </ThemeProvider>
+          </ThemeProvider>
+        </AuthProvider>
       </body>
     </html>
   );

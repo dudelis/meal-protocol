@@ -21,6 +21,11 @@ model User {
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  mealSettings MealSetting[]
+  foodSettings FoodSetting[]
+  days Day[]
+  DayFoods DayFood[]
 }
  
 model Account {
@@ -82,17 +87,53 @@ model Authenticator {
 }
 
 
-model Food {
+model FoodSetting {
   id     String @id @default(auto()) @map("_id") @db.ObjectId
   letter String
   name   String
   order  Int
   weight String
+  userId String @db.ObjectId
+
+  user  User @relation(fields: [userId], references: [id])
 }
 
-model Meal {
+model MealSetting {
   id    String @id @default(auto()) @map("_id") @db.ObjectId
   name  String
   order Int
+  userId String @db.ObjectId
+
+  user  User @relation(fields: [userId], references: [id])
+}
+
+model Day {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  name  String
+  order Int
+  userId String @db.ObjectId
+  sportActivity String
+  date DateTime
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user  User @relation(fields: [userId], references: [id])
+
+  dayFoods DayFood[]
+}
+
+model DayFood {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  dayId  String @db.ObjectId
+  userId String @db.ObjectId
+  meal String
+  food String
+
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  user  User @relation(fields: [userId], references: [id])
+  day  Day @relation(fields: [dayId], references: [id])
 }
 

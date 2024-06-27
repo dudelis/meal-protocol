@@ -1,7 +1,14 @@
 'use client'
+import { useSession } from 'next-auth/react';
 import React, { useState } from 'react';
+import useSWR from 'swr'
 
 const FoodPage = () => {
+  const { data, isLoading, mutate, error } = useSWR(`/api/settingsfood`);
+  console.log(data);
+
+
+
   const [foodList, setFoodList] = useState([]);
   const [foodForm, setFoodForm] = useState({ id: '', foodName: '', weight: '' });
 
@@ -16,7 +23,7 @@ const FoodPage = () => {
       alert('Please fill out all fields.');
       return;
     }
-    setFoodList([...foodList, foodForm]);
+    // setFoodList([...foodList, foodForm]);
     setFoodForm({ id: '', foodName: '', weight: '' }); // Reset form
   };
 
@@ -45,7 +52,7 @@ const FoodPage = () => {
         <ul>
           {foodList.map((food, index) => (
             <li key={index} className="mb-2">
-              ID: {food.id}, Food Name: {food.foodName}, Weight: {food.weight}
+              {/* ID: {food.id}, Food Name: {food.foodName}, Weight: {food.weight} */}
             </li>
           ))}
         </ul>

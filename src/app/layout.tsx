@@ -40,7 +40,7 @@ export default function RootLayout({
                   md:max-w-screen-sm
                   md:px-1"
               >
-                <main className="flex min-h-screen flex-col items-center justify-between p-24">
+                <main className="flex flex-col items-center justify-between pt-24">
                   {children}
                 </main>
 

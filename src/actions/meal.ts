@@ -16,3 +16,36 @@ export async function getMeals() {
   });
   return mealSettings;
 }
+
+export async function createMeal({
+  name,
+  order,
+}: {
+  name: string;
+  order: number;
+}) {
+  const session = (await getAuthSession()) as ISession;
+  if (!session) {
+    return Response.json({ message: "Unauthorized" }, { status: 401 });
+  }
+  const userId = (await getCurrentUserId()) as string;
+  const meal = await prisma.mealSetting.create({
+    data: {
+      userId,
+      name: name,
+      order: order,
+    },
+  });
+  return meal;
+}
+
+export async function deleteMeal({ id }: { id: string }) {
+  const session = (await getAuthSession()) as ISession;
+  if (!session) {
+    return Response.json({ message: "Unauthorized" }, { status: 401 });
+  }
+  const meal = await prisma.mealSetting.delete({
+    where: { id },
+  });
+  return meal;
+}

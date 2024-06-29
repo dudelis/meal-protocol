@@ -6,7 +6,8 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-
+import { TrashIcon } from '@heroicons/react/24/solid';
+import { deleteMeal } from "@/actions/meal";
 import {
   Table,
   TableBody,
@@ -15,16 +16,48 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { useRouter } from "next/navigation";
+import { useMemo } from "react";
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
+interface DataTableProps<TData> {
+  columns: ColumnDef<TData>[]
   data: TData[]
 }
 
-export function DataTable<TData, TValue>({
-  columns,
-  data,
-}: DataTableProps<TData, TValue>) {
+export type TMeal = {
+  id: string;
+  name: string;
+  order: number;
+};
+
+export function DataTable({ data }: { data: TMeal[] }) {
+  const router = useRouter();
+  const columns = useMemo<ColumnDef<TMeal>[]>(() => [
+    {
+      accessorKey: "name",
+      header: "Назва"
+    },
+    {
+      accessorKey: "order",
+      header: "порядок",
+    },
+    {
+      id: "actions",
+      cell: ({ row }) => {
+        return (
+          <div className="flex gap-2">
+            <button className="bg-destructive text-white p-2 rounded" onClick={async () => {
+              const meal = await deleteMeal({ id: row.original.id });
+              router.refresh();
+            }}>
+              <TrashIcon className="h-4 w-4" />
+            </button>
+
+          </div>
+        );
+      }
+    }
+  ], [router]);
   const table = useReactTable({
     data,
     columns,

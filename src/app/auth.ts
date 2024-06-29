@@ -6,6 +6,11 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { getServerSession } from "next-auth/next";
 import prisma from "@/lib/db";
 import { Adapter } from "next-auth/adapters";
+import {
+  GetServerSidePropsContext,
+  NextApiRequest,
+  NextApiResponse,
+} from "next";
 
 export interface ISession extends DefaultSession {
   user?: {
@@ -50,4 +55,11 @@ export const authOptions: NextAuthOptions = {
 } satisfies NextAuthOptions;
 
 // export const { handlers, signIn, signOut, auth } = NextAuth(authOptions);
-export const getAuthSession = async () => getServerSession(authOptions);
+export const getAuthSession = async (
+  ...args:
+    | [GetServerSidePropsContext["req"], GetServerSidePropsContext["res"]]
+    | [NextApiRequest, NextApiResponse]
+    | []
+) => {
+  return getServerSession(...args, authOptions);
+};

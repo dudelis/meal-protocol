@@ -8,6 +8,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { cn } from '@/lib/utils';
+import { useState } from 'react';
 
 const buttonClass = "rounded-[5px] cursor-pointer font-bold border-none text-center py-8 px-10 text-md "
 
@@ -31,8 +32,8 @@ const FooterMenu = () => {
           </PopoverTrigger>
           <PopoverContent>
             <div className='h-96 flex flex-col gap-16'>
-              <Link href="/mealtypes" className={cn(buttonClass, "bg-destructive")}>Meal Types</Link>
-              <Link href="/food" className={cn(buttonClass, "bg-destructive")}>Food</Link>
+              <Link href="/settings/meals" className={cn(buttonClass, "bg-destructive")}>Прийоми їжі</Link>
+              <Link href="/settings/food" className={cn(buttonClass, "bg-destructive")}>Що можна їсти</Link>
             </div>
           </PopoverContent>
         </Popover>

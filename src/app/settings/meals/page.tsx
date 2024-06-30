@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import React from 'react';
-import { DataTable, TMeal } from "./data-table"
-import { MealForm } from './form';
+import { DataTable, TMeal } from "./meal-table"
+import { MealForm } from './meal-form';
 import { redirect } from 'next/navigation'
 import { getAuthSession } from '@/app/auth';
 import { getMeals } from '@/actions/meal';
@@ -10,6 +10,8 @@ import { getMeals } from '@/actions/meal';
 const MealPage = async () => {
   const session = await getAuthSession();
   if (!session) redirect("/login");
+
+
   const meals = (await getMeals()) as TMeal[];
 
   return (

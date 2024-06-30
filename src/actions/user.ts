@@ -19,7 +19,7 @@ export async function getCurrentUserId() {
   const session = (await getAuthSession()) as ISession;
 
   if (!session) {
-    return null;
+    return Response.json({ message: "Unauthorized" }, { status: 401 });
   }
   if (session?.user?.id) {
     return session.user.id;

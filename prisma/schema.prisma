@@ -91,8 +91,8 @@ model FoodSetting {
   id     String @id @default(auto()) @map("_id") @db.ObjectId
   letter String
   name   String
-  order  Int? 
-  weight String
+  order  Int?
+  amount String?
   userId String @db.ObjectId
 
   user  User @relation(fields: [userId], references: [id])

@@ -1,5 +1,4 @@
 "use client"
-
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form";
@@ -7,24 +6,19 @@ import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { createMeal } from "@/actions/meal";
-import { useRouter } from 'next/navigation';
+import { createMealAction } from "@/actions/meal";
 
 const formSchema = z.object({
-  name: z.string().min(2).max(50),
-  // order: z.string(). transform((v) => Number(v) || 0),
+  name: z.string().min(1, "Ну то треба хоч щось написати").max(50),
 })
 
-
 export function MealForm() {
-  const router = useRouter();
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -33,21 +27,22 @@ export function MealForm() {
     },
   })
 
-  // 2. Define a submit handler.
+  // // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    await createMeal(values);
+    await createMealAction(values.name);
     form.reset({
-      name: "",
-      // order: values.order + 1
+      name: ""
     });
-    router.refresh();
   }
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+      <form
+        //action={createMealAction}
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-2">
         <FormField
+
           control={form.control}
           name="name"
           render={({ field }) => (

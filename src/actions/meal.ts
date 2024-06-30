@@ -1,14 +1,11 @@
 "use server";
-import getServerSession from "next-auth";
-import { ISession, authOptions, getAuthSession } from "@/app/auth";
+import { ISession, getAuthSession } from "@/app/auth";
 import prisma from "@/lib/db";
-import { getCurrentUser, getCurrentUserId } from "./user";
+import { getCurrentUserId } from "./user";
+import { revalidatePath, revalidateTag } from "next/cache";
+import { redirect } from "next/navigation";
 
 export async function getMeals() {
-  const session = (await getAuthSession()) as ISession;
-  if (!session) {
-    return Response.json({ message: "Unauthorized" }, { status: 401 });
-  }
   const userId = (await getCurrentUserId()) as string;
   const mealSettings = await prisma.mealSetting.findMany({
     where: { userId },
@@ -17,36 +14,29 @@ export async function getMeals() {
   return mealSettings;
 }
 
-export async function createMeal({ name }: { name: string }) {
-  const session = (await getAuthSession()) as ISession;
-  if (!session) {
-    return Response.json({ message: "Unauthorized" }, { status: 401 });
-  }
+export async function createMealAction(name: string) {
   const userId = (await getCurrentUserId()) as string;
   const lastMeal = await prisma.mealSetting.findFirst({
     where: { userId },
     orderBy: { order: "desc" },
   });
   const order = lastMeal ? lastMeal.order + 1 : 0;
-  const meal = await prisma.mealSetting.create({
+  await prisma.mealSetting.create({
     data: {
       userId,
       name: name,
       order: order,
     },
   });
-  return meal;
+  revalidatePath("/");
 }
 
 export async function deleteMeal({ id }: { id: string }) {
-  const session = (await getAuthSession()) as ISession;
-  if (!session) {
-    return Response.json({ message: "Unauthorized" }, { status: 401 });
-  }
+  const userId = (await getCurrentUserId()) as string;
   const meal = await prisma.mealSetting.delete({
-    where: { id },
+    where: { id, userId },
   });
-  return meal;
+  revalidatePath("/");
 }
 
 export async function reorderMeals({
@@ -110,20 +100,5 @@ export async function reorderMeals({
     });
   }
 
-  // const startOrder =
-  //   source.order > destination.order ? destination.order : source.order;
-  // const endOrder =
-  //   source.order > destination.order ? source.order : destination.order;
-
-  // for (let i = startOrder; i <= endOrder; i++) {}
-
-  // await prisma.mealSetting.update({
-  //   where: { id: sourceId },
-  //   data: { name: destination.name },
-  // });
-  // await prisma.mealSetting.update({
-  //   where: { id: destinationId },
-  //   data: { name: source.name },
-  // });
-  return { source, destination };
+  revalidatePath("/");
 }

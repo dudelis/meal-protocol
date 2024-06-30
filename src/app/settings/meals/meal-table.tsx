@@ -1,5 +1,4 @@
 "use client"
-
 import {
   ColumnDef,
   Row,
@@ -8,7 +7,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table"
 import { TrashIcon } from '@heroicons/react/24/solid';
-import { deleteMeal, reorderMeals } from "@/actions/meal";
+import { deleteMeal, getMeals, reorderMeals } from "@/actions/meal";
 import {
   Table,
   TableBody,
@@ -18,7 +17,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { useRouter } from "next/navigation";
-import { CSSProperties, useMemo, useState } from "react";
+import { CSSProperties, use, useEffect, useMemo, useState } from "react";
 // needed for table body level scope DnD setup
 import {
   DndContext,
@@ -27,7 +26,6 @@ import {
   TouchSensor,
   closestCenter,
   type DragEndEvent,
-  type UniqueIdentifier,
   useSensor,
   useSensors,
 } from '@dnd-kit/core'
@@ -76,13 +74,6 @@ const DraggableRow = ({ row }: { row: Row<TMeal> }) => {
     </tr>
   )
 }
-// {
-//   row.getVisibleCells().map((cell) => (
-//     <TableCell key={cell.id}>
-//       {flexRender(cell.column.columnDef.cell, cell.getContext())}
-//     </TableCell>
-//   ))
-// }
 
 interface DataTableProps<TData> {
   columns: ColumnDef<TData>[]
@@ -95,40 +86,42 @@ export type TMeal = {
   order: number;
 };
 
-export function DataTable({ data }: { data: TMeal[] }) {
-  const [meals, setMeals] = useState(data)
-  const dataIds = useMemo(() => data.map((d) => d.id), [data]);
-  const router = useRouter();
-  const columns = useMemo<ColumnDef<TMeal>[]>(() => [
-    {
-      id: 'drag-handle',
-      header: '',
-      cell: ({ row }) => <RowDragHandleCell rowId={row.id} />,
-      size: 10,
-      enableResizing: true,
-    },
-    {
-      accessorKey: "name",
-      header: "Назва"
-    },
-    {
-      id: "actions",
-      size: 10,
-      cell: ({ row }) => {
-        return (
-          <div className="flex gap-2 justify-end">
-            <button className="bg-destructive text-white p-2 rounded" onClick={async () => {
-              const meal = await deleteMeal({ id: row.original.id });
-              router.refresh();
-            }}>
-              <TrashIcon className="h-4 w-4" />
-            </button>
+const columns: ColumnDef<TMeal>[] = [
+  {
+    id: 'drag-handle',
+    header: '',
+    cell: ({ row }) => <RowDragHandleCell rowId={row.id} />,
+    size: 10,
+    enableResizing: true,
+  },
+  {
+    accessorKey: "name",
+    header: "Назва"
+  },
+  {
+    id: "actions",
+    size: 10,
+    cell: ({ row }) => {
+      return (
+        <div className="flex gap-2 justify-end">
+          <button className="bg-destructive text-white p-2 rounded" onClick={async () => await deleteMeal({ id: row.original.id })}>
+            <TrashIcon className="h-4 w-4" />
+          </button>
 
-          </div>
-        );
-      }
+        </div>
+      );
     }
-  ], [router]);
+  }
+];
+
+export function DataTable({ data }: { data: TMeal[] }) {
+  const [meals, setMeals] = useState([] as TMeal[]);
+  useEffect(() => {
+    setMeals(data);
+
+  }, [data]);
+  const dataIds = useMemo(() => meals.map((d) => d.id), [meals]);
+
   const table = useReactTable({
     data: meals,
     columns,
@@ -151,10 +144,9 @@ export function DataTable({ data }: { data: TMeal[] }) {
       setMeals(meals => {
         const oldIndex = dataIds.indexOf(active.id.toString())
         const newIndex = dataIds.indexOf(over.id.toString())
-        return arrayMove(data, oldIndex, newIndex) //this is just a splice util
+        return arrayMove(meals, oldIndex, newIndex)
       });
       await reorderMeals({ sourceId: active.id.toString(), destinationId: over.id.toString() });
-      router.refresh();
     }
   }
 
@@ -193,16 +185,6 @@ export function DataTable({ data }: { data: TMeal[] }) {
               {table.getRowModel().rows?.length ? (
                 table.getRowModel().rows.map((row) => (
                   <DraggableRow key={row.id} row={row} />
-                  // <TableRow
-                  //   key={row.id}
-                  //   data-state={row.getIsSelected() && "selected"}
-                  // >
-                  //   {row.getVisibleCells().map((cell) => (
-                  //     <TableCell key={cell.id}>
-                  //       {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  //     </TableCell>
-                  //   ))}
-                  // </TableRow>
                 ))
               ) : (
                 <TableRow>

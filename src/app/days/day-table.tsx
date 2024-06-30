@@ -1,6 +1,4 @@
 "use client"
-import { deleteFood } from "@/actions/food";
-import { TrashIcon } from "@heroicons/react/24/solid";
 
 import {
   ColumnDef,
@@ -17,48 +15,50 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/solid"
+import { deleteDay } from "@/actions/day"
 
-
-export type TFood = {
-  id: string;
-  name: string;
-  letter: string;
+export type TDay = {
+  id: string,
+  order: number,
+  sportActivity: string
 }
 
-export const columns: ColumnDef<TFood>[] = [
+export const columns: ColumnDef<TDay>[] = [
   {
-    accessorKey: "letter",
+    id: "day-order",
     header: "",
+    cell: ({ row }) => { <span>`День ${row.original.order}`</span> }
+  },
+  {
+    id: "action-edit",
     size: 10,
-    enableSorting: false,
     cell: ({ row }) => {
       return (
-        <div className="flex items-center justify-center text-xl">
-          {row.original.letter.toUpperCase() + ")"}
+        <div className="flex gap-2 justify-end">
+          <button className="bg-destructive text-white p-2 rounded" onClick={async () => await ({ id: row.original.id })}>
+            <PencilSquareIcon className="h-4 w-4" />
+          </button>
         </div>
       );
     }
   },
   {
-    header: "Назва",
-    accessorKey: "name",
-  },
-  {
-    id: "actions",
+    id: "action-delete",
     size: 10,
     cell: ({ row }) => {
       return (
         <div className="flex gap-2 justify-end">
-          <button className="bg-destructive text-white p-2 rounded" onClick={async () => await deleteFood({ id: row.original.id })}>
+          <button className="bg-destructive text-white p-2 rounded" onClick={async () => await deleteDay({ id: row.original.id })}>
             <TrashIcon className="h-4 w-4" />
           </button>
         </div>
       );
     }
   }
-];
+]
 
-export function FoodTable({ data }: { data: TFood[] }) {
+export function DayTable({ data }: { data: TDay[] }) {
   const table = useReactTable({
     data,
     columns,
@@ -112,6 +112,3 @@ export function FoodTable({ data }: { data: TFood[] }) {
     </div>
   );
 }
-
-
-

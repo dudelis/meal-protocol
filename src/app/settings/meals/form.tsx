@@ -19,7 +19,7 @@ import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
-  order: z.string().transform((v) => Number(v) || 0),
+  // order: z.string(). transform((v) => Number(v) || 0),
 })
 
 
@@ -38,7 +38,10 @@ export function MealForm() {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     await createMeal(values);
-    form.reset({ name: "", order: values.order + 1 });
+    form.reset({
+      name: "",
+      // order: values.order + 1
+    });
     router.refresh();
   }
   return (
@@ -57,24 +60,7 @@ export function MealForm() {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="order"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Порядок</FormLabel>
-              <FormControl>
-                <Input
-                  type="number"
-                  min={0}
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit">Submit</Button>
+        <Button type="submit">Додати</Button>
       </form>
     </Form>
   )

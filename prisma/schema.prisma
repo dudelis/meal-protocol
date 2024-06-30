@@ -91,7 +91,7 @@ model FoodSetting {
   id     String @id @default(auto()) @map("_id") @db.ObjectId
   letter String
   name   String
-  order  Int
+  order  Int? 
   weight String
   userId String @db.ObjectId
 

@@ -19,9 +19,9 @@ const FooterMenu = () => {
   return (
     <div className="fixed bottom-0 left-0 w-full bg-white dark:bg-gray-800  dark:border-gray-700">
       <div className="flex justify-around items-center h-16">
-        <Link href="/settings" className="focus:outline-none w-[25%] flex justify-center hover:bg-popover h-[100%] items-center">
+        <button onClick={() => router.back()} className="focus:outline-none w-[25%] flex justify-center hover:bg-popover h-[100%] items-center">
           <ArrowLeftIcon className="h-6 w-6 text-gray-800 dark:text-white" />
-        </Link>
+        </button>
         <Link href="/settings" className="focus:outline-none w-[25%] flex justify-center hover:bg-popover h-[100%] items-center">
           <CalendarIcon className="h-6 w-6 text-gray-800 dark:text-white" />
         </Link>

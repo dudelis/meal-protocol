@@ -17,6 +17,8 @@ import {
 } from "@/components/ui/table"
 import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/solid"
 import { deleteDay } from "@/actions/day"
+import Link from "next/link"
+import { DayDialog } from "./day-dialog"
 
 export type TDay = {
   id: string,
@@ -28,19 +30,16 @@ export const columns: ColumnDef<TDay>[] = [
   {
     id: "day-order",
     header: "",
-    cell: ({ row }) => { <span>`День ${row.original.order}`</span> }
-  },
-  {
-    id: "action-edit",
-    size: 10,
+    size: 300,
     cell: ({ row }) => {
+      // <span>{`День ${row.original.order}`}</span>
       return (
-        <div className="flex gap-2 justify-end">
-          <button className="bg-destructive text-white p-2 rounded" onClick={async () => await ({ id: row.original.id })}>
-            <PencilSquareIcon className="h-4 w-4" />
-          </button>
+        <div className="flex gap-2 justify-start w-full">
+          <Link href={`/days/${row.original.id}`} className="w-full  p-4">
+            {`День ${row.original.order}`}
+          </Link>
         </div>
-      );
+      )
     }
   },
   {
@@ -48,10 +47,8 @@ export const columns: ColumnDef<TDay>[] = [
     size: 10,
     cell: ({ row }) => {
       return (
-        <div className="flex gap-2 justify-end">
-          <button className="bg-destructive text-white p-2 rounded" onClick={async () => await deleteDay({ id: row.original.id })}>
-            <TrashIcon className="h-4 w-4" />
-          </button>
+        <div className="flex gap-2 justify-end p-4 ">
+          <DayDialog id={row.original.id} />
         </div>
       );
     }
@@ -73,7 +70,7 @@ export function DayTable({ data }: { data: TDay[] }) {
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
-                  <TableHead key={header.id}>
+                  <TableHead key={header.id} style={{ width: `${header.getSize()}px !important` }}>
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -94,7 +91,7 @@ export function DayTable({ data }: { data: TDay[] }) {
                 data-state={row.getIsSelected() && "selected"}
               >
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
+                  <TableCell key={cell.id} className="p-0">
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}

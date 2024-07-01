@@ -14,11 +14,9 @@ const Header = () => {
   return (
     <header className="bg-gray-800 text-white p-4 fixed top-0 left-0 w-full">
       <div className="container mx-auto flex justify-between items-center">
-        <Image src="/logo.jpg" alt="Meal Protocol" width={40} height={40} />
         <Link href="/">
           <h1 className="text-xl font-bold">Meal Protocol</h1>
         </Link>
-
         <div className="flex items-center space-x-4">
           {status === 'authenticated' ? (
             <button className="bg-destructive hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onClick={() => signOut()}>

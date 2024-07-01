@@ -22,7 +22,7 @@ const FooterMenu = () => {
         <button onClick={() => router.back()} className="focus:outline-none w-[25%] flex justify-center hover:bg-popover h-[100%] items-center">
           <ArrowLeftIcon className="h-6 w-6 text-gray-800 dark:text-white" />
         </button>
-        <Link href="/settings" className="focus:outline-none w-[25%] flex justify-center hover:bg-popover h-[100%] items-center">
+        <Link href="/days" className="focus:outline-none w-[25%] flex justify-center hover:bg-popover h-[100%] items-center">
           <CalendarIcon className="h-6 w-6 text-gray-800 dark:text-white" />
         </Link>
 

@@ -123,11 +123,13 @@ model Day {
 }
 
 model DayFood {
-  id     String @id @default(auto()) @map("_id") @db.ObjectId
-  dayId  String @db.ObjectId
-  userId String @db.ObjectId
-  meal String
-  food String
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  dayId   String @db.ObjectId
+  userId  String @db.ObjectId
+  meal    String
+  letter  String
+  food    String
+  weight  String
 
 
   createdAt   DateTime @default(now())

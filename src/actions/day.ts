@@ -16,6 +16,7 @@ export async function getDayById({ id }: { id: string }) {
   const userId = (await getCurrentUserId()) as string;
   const day = await prisma.day.findFirst({
     where: { id, userId },
+    include: { dayFoods: true },
   });
   return day;
 }

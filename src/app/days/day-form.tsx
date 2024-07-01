@@ -16,6 +16,9 @@ import { Textarea } from "@/components/ui/textarea"
 import { createDay, updateDay } from "@/actions/day"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+import { Day } from "react-day-picker"
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import { DayFoodForm } from "./[id]/dayfood-form"
 
 const formSchema = z.object({
   order: z.coerce.string().transform(v => parseInt(v)),
@@ -86,7 +89,37 @@ export function DayForm(params: TDayFormProps) {
             </FormItem>
           )}
         />
-        <Button type="submit">Зберегти</Button>
+        <div className="flex justify-between p-4">
+          <Button type="submit">Зберегти</Button>
+          {params.id &&
+            <Sheet>
+              <SheetTrigger>
+                <span className="rounded text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2" >Додати їжу</span>
+                {/* <PlusCircleIcon className="h-12 w-12 text-primary cursor-pointer rounded-full active:scale-95 active:bg-gray-200 transition duration-150 ease-in-out" /> */}
+              </SheetTrigger>
+              <SheetContent className="w-full sm:3/4 md:w-3/4 lg:w-3/4 sm:max-w-lg md:max-w-lg ">
+                <SheetHeader>
+                  <SheetTitle>Що з&apos;їв - записуй!</SheetTitle>
+                  <SheetDescription>
+                    <DayFoodForm
+                      data={{
+                        id: "",
+                        meal: "",
+                        letter: "",
+                        food: "",
+                        weight: "",
+                        dayId: params.id
+                      }}
+                    />
+                  </SheetDescription>
+                </SheetHeader>
+              </SheetContent>
+            </Sheet>
+            // 
+          }
+        </div>
+
+
       </form>
     </Form>
   )

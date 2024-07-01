@@ -15,50 +15,47 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/solid"
+import { deleteDay } from "@/actions/day"
 import Link from "next/link"
-import { DayDialog } from "./day-dialog"
+//import { DayDialog } from "./day-dialog"
 
-export type TDay = {
+export type TDayFood = {
   id: string,
-  order: number,
-  sportActivity: string
+  meal: string,
+  letter: string
+  food: string,
+  weight: string,
+  userId: string,
+  dayId: string,
+  createdAt: Date;
+  updatedAt: Date;
 }
 
-export const columns: ColumnDef<TDay>[] = [
+
+const columns: ColumnDef<TDayFood>[] = [
   {
-    id: "day-order",
+    accessorKey: "letter",
     header: "",
-    size: 300,
-    cell: ({ row }) => {
-      // <span>{`День ${row.original.order}`}</span>
-      return (
-        <div className="flex gap-2 justify-start w-full">
-          <Link href={`/days/${row.original.id}`} className="w-full  p-4">
-            {`День ${row.original.order}`}
-          </Link>
-        </div>
-      )
-    }
+    size: 10
   },
   {
-    id: "action-delete",
-    size: 10,
-    cell: ({ row }) => {
-      return (
-        <div className="flex gap-2 justify-end p-4 ">
-          <DayDialog id={row.original.id} />
-        </div>
-      );
-    }
+    header: "Їжа",
+    accessorKey: "food",
+  },
+  {
+    header: "Вага",
+    accessorKey: "weight",
+    size: 10
   }
 ]
 
-export function DayTable({ data }: { data: TDay[] }) {
+export function DayFoodTable({ data }: { data: TDayFood[] }) {
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel()
-  });
+  })
 
   return (
     <div className="rounded-md border w-full">
@@ -89,7 +86,7 @@ export function DayTable({ data }: { data: TDay[] }) {
                 data-state={row.getIsSelected() && "selected"}
               >
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id} className="p-0">
+                  <TableCell key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
@@ -105,5 +102,5 @@ export function DayTable({ data }: { data: TDay[] }) {
         </TableBody>
       </Table>
     </div>
-  );
+  )
 }

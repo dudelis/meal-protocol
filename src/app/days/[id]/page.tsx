@@ -2,6 +2,9 @@ import { redirect } from "next/navigation";
 import { getAuthSession } from "@/app/auth";
 import { getDayById } from "@/actions/day";
 import { DayForm } from "../day-form";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { DayFoodTable, TDayFood } from "./dayfood-table";
+import { DayFoodForm } from "./dayfood-form";
 
 
 type TDayPageProps = {
@@ -16,11 +19,28 @@ const DayPage = async ({ params }: TDayPageProps) => {
   return (
     <div className='flex flex-col gap-4 w-full'>
       <section className='w-full'>
-        {day &&
-          <DayForm order={day.order as number} sportActivity={day.sportActivity as string} id={day.id} />
-        }
+        <Card className='w-full'>
+          <CardHeader>
+            <CardTitle>Треба все записати</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {day &&
+              <DayForm
+                order={day.order as number}
+                sportActivity={day.sportActivity as string}
+                id={day.id}
+              />
+            }
+          </CardContent>
+        </Card>
+
+
       </section>
       <section className='w-full'>
+        {/* <DayFoodForm data={} /> */}
+        {day &&
+          <DayFoodTable data={day.dayFoods} />
+        }
 
       </section>
     </div>

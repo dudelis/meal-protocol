@@ -13,12 +13,13 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { createDay, updateDay } from "@/actions/day"
 import { useRouter } from "next/navigation"
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
@@ -27,12 +28,13 @@ import { useEffect, useState } from "react"
 import { get } from "http"
 import { getMeals } from "@/actions/meal"
 import { getFoodForADay } from "@/actions/food"
+import { createDayFood, updateDayFood } from "@/actions/dayfood"
 
 const formSchema = z.object({
-  letter: z.string(),
-  meal: z.string(),
+  letter: z.string().min(1, "Ну треба щось обрати"),
+  meal: z.string().min(1, "Ну треба щось обрати"),
   food: z.string().min(1),
-  weight: z.string()
+  weight: z.string().min(1)
 })
 
 export type TDayFoodFormProps = {
@@ -67,17 +69,21 @@ export function DayFoodForm({ data }: TDayFoodFormProps) {
 
   // 2. Define a submit handler.
   // // 2. Define a submit handler.
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    // if (params.id) {
-    //   await updateDay({ id: params.id, ...values });
-    //   router.back();
-    // } else {
-    //   const day = await createDay(values);
-    //   router.push(`/days/${day.id}`)
-    // }
+  async function onSubmit(value: z.infer<typeof formSchema>) {
+
+    console.log(value);
+    const values = form.getValues();
+    if (data.id) {
+      await updateDayFood({ id: data.id, dayId: data.dayId, ...values });
+      router.back();
+    } else {
+      const day = await createDayFood({ dayId: data.dayId, ...values });
+    }
+
     // form.reset({
-    //   order: 0,
-    //   sportActivity: ""
+    //   meal: "",
+    //   letter: "",
+    //   food: "",
     // });
   }
 
@@ -85,8 +91,7 @@ export function DayFoodForm({ data }: TDayFoodFormProps) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-2 flex flex-col gap-8 w-full"
-
+        className="space-y-2 flex flex-col gap-6 w-full"
       >
         <FormField
           control={form.control}
@@ -120,11 +125,21 @@ export function DayFoodForm({ data }: TDayFoodFormProps) {
                     <SelectValue placeholder="Оберіть прийом їжі" />
                   </SelectTrigger>
                 </FormControl>
-                <SelectContent>
-                  {foods.map((food, index) =>
-                    <SelectItem key={index} value={food.letter} style={{ wordWrap: "break-word" }}>
-                      {food.name}
-                    </SelectItem>)}
+                <SelectContent className=" w-min">
+                  <SelectGroup>
+                    {foods.filter((food) => !(food.selected)).map((food, index) =>
+                      <SelectItem key={index} value={food.letter} className="" >
+                        {`${food.letter}) ${food.name}`}
+                      </SelectItem>)}
+                  </SelectGroup>
+                  <SelectSeparator />
+                  {/* <div className="h-[1px] bg-foreground my-2"></div> */}
+                  <SelectGroup>
+                    {foods.filter((food) => food.selected).map((food, index) =>
+                      <SelectItem key={index} value={food.letter} className="" >
+                        {`${food.letter}) ${food.name}`}
+                      </SelectItem>)}
+                  </SelectGroup>
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -133,10 +148,10 @@ export function DayFoodForm({ data }: TDayFoodFormProps) {
         />
         <FormField
           control={form.control}
-          name="letter"
+          name="food"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Як щодо спорту?</FormLabel>
+              <FormLabel>Що і скільки з&apos;їв?</FormLabel>
 
               <FormControl>
                 <Textarea placeholder="" {...field} />
@@ -145,7 +160,7 @@ export function DayFoodForm({ data }: TDayFoodFormProps) {
             </FormItem>
           )}
         />
-        <Button type="submit">Зберегти</Button>
+        <Button type="submit" onClick={() => form.handleSubmit(onSubmit)}>Зберегти</Button>
 
       </form>
     </Form>

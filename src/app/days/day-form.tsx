@@ -21,7 +21,7 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTr
 import { DayFoodForm } from "./[id]/dayfood-form"
 
 const formSchema = z.object({
-  order: z.coerce.string().transform(v => parseInt(v)),
+  order: z.coerce.number().min(1, "Номер дня має бути більше 0"),
   sportActivity: z.string(),
 })
 

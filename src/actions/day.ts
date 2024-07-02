@@ -36,6 +36,7 @@ export async function createDay({
       sportActivity,
     },
   });
+
   return day;
 }
 

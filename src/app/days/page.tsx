@@ -14,9 +14,6 @@ import {
 import { DayForm } from "./day-form";
 import { Spacer } from "@/components/spacer";
 
-
-
-
 const DaysPage = async () => {
   const session = await getAuthSession();
   if (!session) redirect("/login");

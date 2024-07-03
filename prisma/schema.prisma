@@ -129,13 +129,12 @@ model DayFood {
   meal    String
   letter  String
   food    String
-  weight  String
 
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   
   user  User @relation(fields: [userId], references: [id])
-  day  Day @relation(fields: [dayId], references: [id])
+  day  Day @relation(fields: [dayId], references: [id], onDelete: Cascade)
 }
 

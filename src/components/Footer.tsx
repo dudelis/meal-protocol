@@ -15,9 +15,6 @@ const buttonClass = "rounded-[5px] cursor-pointer font-bold border-none text-cen
 
 const navigateBack = (path: string) => {
   const lastSlashIndex = path.lastIndexOf('/');
-  console.log(path);
-  console.log(lastSlashIndex);
-  console.log(lastSlashIndex >= 0 && path.length > 1);
   if (lastSlashIndex >= 0 && path.length > 1) { // Ensure it's not the first character
     return path.substring(0, lastSlashIndex + 1);
   } else {

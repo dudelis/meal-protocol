@@ -19,13 +19,11 @@ export async function createDayFood({
   letter,
   meal,
   food,
-  weight,
   dayId,
 }: {
   letter: string;
   meal: string;
   food: string;
-  weight: string;
   dayId: string;
 }) {
   const userId = (await getCurrentUserId()) as string;
@@ -35,7 +33,6 @@ export async function createDayFood({
       letter,
       meal,
       food,
-      weight,
       dayId,
     },
   });
@@ -55,24 +52,21 @@ export async function updateDayFood({
   letter,
   meal,
   food,
-  weight,
   dayId,
 }: {
   id: string;
   letter: string;
   meal: string;
   food: string;
-  weight: string;
   dayId: string;
 }) {
   const userId = (await getCurrentUserId()) as string;
   await prisma.dayFood.update({
-    where: { id, userId },
+    where: { id, userId, dayId },
     data: {
       letter,
       meal,
       food,
-      weight,
     },
   });
   revalidatePath("/");

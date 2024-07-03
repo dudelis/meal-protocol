@@ -19,38 +19,45 @@ import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/solid"
 import { deleteDay } from "@/actions/day"
 import Link from "next/link"
 //import { DayDialog } from "./day-dialog"
-
-export type TDayFood = {
-  id: string,
-  meal: string,
-  letter: string
-  food: string,
-  weight: string,
-  userId: string,
-  dayId: string,
-  createdAt: Date;
-  updatedAt: Date;
-}
+import { DayFood } from "@prisma/client";
+import { deleteDayFood } from "@/actions/dayfood"
+import { DayFoodForm } from "./dayfood-form"
 
 
-const columns: ColumnDef<TDayFood>[] = [
+
+
+const columns: ColumnDef<DayFood>[] = [
   {
     accessorKey: "letter",
     header: "",
-    size: 10
+    size: 10,
+    cell: ({ row }) => {
+      return (
+        <DayFoodForm data={row.original}>
+          <span className="w-auto">
+            {row.original.letter.toUpperCase() + ") " + row.original.food}
+          </span>
+        </DayFoodForm>
+      )
+    }
   },
+
   {
-    header: "Їжа",
-    accessorKey: "food",
-  },
-  {
-    header: "Вага",
-    accessorKey: "weight",
-    size: 10
+    id: "actions",
+    size: 10,
+    cell: ({ row }) => {
+      return (
+        <div className="flex gap-2 justify-end">
+          <button className="bg-destructive text-white p-2 rounded" onClick={async () => await deleteDayFood({ id: row.original.id })}>
+            <TrashIcon className="h-4 w-4" />
+          </button>
+        </div>
+      );
+    }
   }
 ]
 
-export function DayFoodTable({ data }: { data: TDayFood[] }) {
+export function DayFoodTable({ data }: { data: DayFood[] }) {
   const table = useReactTable({
     data,
     columns,
@@ -60,7 +67,7 @@ export function DayFoodTable({ data }: { data: TDayFood[] }) {
   return (
     <div className="rounded-md border w-full">
       <Table>
-        <TableHeader>
+        {/* <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
@@ -77,7 +84,7 @@ export function DayFoodTable({ data }: { data: TDayFood[] }) {
               })}
             </TableRow>
           ))}
-        </TableHeader>
+        </TableHeader> */}
         <TableBody>
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (

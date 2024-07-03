@@ -19,6 +19,7 @@ const DaysPage = async () => {
   if (!session) redirect("/login");
 
   const days = (await getDays()) as TDay[];
+  console.log('days loaded');
   const lastOrder = days[0] ? days[0].order + 1 : 1;
 
 
@@ -31,10 +32,8 @@ const DaysPage = async () => {
           </SheetTrigger>
           <SheetContent className="w-full md:w-3/4 lg:w-1/2 md:max-w-lg ">
             <SheetHeader>
-              <SheetTitle>Що з&apos;їв - записуй!</SheetTitle>
-              <SheetDescription>
-                <DayForm order={lastOrder} sportActivity="" id="" />
-              </SheetDescription>
+              <SheetTitle>Давай створимо день</SheetTitle>
+              <DayForm order={lastOrder} sportActivity="" id="" />
             </SheetHeader>
           </SheetContent>
         </Sheet>

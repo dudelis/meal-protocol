@@ -10,6 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import { Textarea } from "@/components/ui/textarea";
 import { groupDayFoodsByMeal } from "@/lib/utils";
 import { DayFood, Prisma } from "@prisma/client";
 import { set } from "date-fns";
@@ -31,28 +32,20 @@ export const DayReportDialog = ({ dayId }: { dayId: string }) => {
       if (day) {
         setDayFoods(groupDayFoodsByMeal(day.dayFoods));
         setReport(
-          `
-            День ${day.order}<br />
-            Спортивна активність: <br />
-            ${day.sportActivity}
-            <br />
-            <br />
-            <ul>
-              ${Object.keys(dayFoods).map((key) => {
+          `День ${day.order} ${String.fromCharCode(13)}` +
+          `${Object.keys(dayFoods).map((key) => {
             return (
-              `<li key="${key}">${key}
-                <ul>
-                  ${dayFoods[key].map((dayFood) => {
+              `${String.fromCharCode(13, 10)}${key}${String.fromCharCode(13, 10)}` +
+              `${dayFoods[key].map((dayFood) => {
                 return (
-                  `<li key="${dayFood.id}">&nbsp; ${`${dayFood.letter}) ${dayFood.food}`}</li>`
+                  `${dayFood.letter}) ${dayFood.food}${String.fromCharCode(13, 10)}`
                 )
-              }).join("")}
-                </ul>
-              </li>`
+              }).join("")}`
             )
           }).join("")
-          }
-            </ul>`
+          }` +
+          `${String.fromCharCode(13, 10)}Спортивна активність: ${String.fromCharCode(13, 10)}` +
+          `${day.sportActivity}${String.fromCharCode(13)}`
         );
       }
     });
@@ -74,13 +67,13 @@ export const DayReportDialog = ({ dayId }: { dayId: string }) => {
           <Spacer />
           {day &&
             <DialogDescription>
-              <div dangerouslySetInnerHTML={{ __html: report as string }} />
+              <Textarea readOnly value={report as string} onChange={(e) => setReport(e.target.value)} className="h-96" />
             </DialogDescription>}
         </DialogHeader>
         <Spacer />
         <DialogFooter className="flex flex-row sm:justify-between justify-between">
           <Button variant="default" onClick={() => navigator.clipboard.writeText(report?.toString() as string)}><Clipboard /></Button>
-          <Button variant="outline" onClick={() => setOpen(false)} >Зачинити</Button>
+          <Button variant="outline" onClick={() => setOpen(false)}>Зачинити</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

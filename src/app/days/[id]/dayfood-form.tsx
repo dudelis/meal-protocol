@@ -27,6 +27,7 @@ import { getFoodForADay } from "@/actions/food"
 import { createDayFood, updateDayFood } from "@/actions/dayfood"
 import { useRouter } from "next/navigation"
 import { DayFood } from "@prisma/client"
+import { Spinner } from "@/components/Spinner"
 
 
 const formSchema = z.object({
@@ -43,15 +44,17 @@ export type TDayFoodFormProps = {
 export function DayFoodForm({ data, closeSheet }: TDayFoodFormProps) {
   const [meals, setMeals] = useState<string[]>([]);
   const [foods, setFoods] = useState<{ letter: string, name: string, selected: boolean }[]>([]);
+  const [spinner, setSpinner] = useState(false);
 
 
   const requestData = useCallback(() => {
-    getMeals().then((meals) => {
-      setMeals(meals.map((meal) => meal.name));
-    });
-    getFoodForADay(data.dayId).then((foods) => {
-      setFoods(foods.map((food) => ({ letter: food.letter, name: food.name, selected: food.selected })));
-    });
+    setSpinner(true);
+    Promise.all([
+      getMeals().then((meals) => setMeals(meals.map((meal) => meal.name))),
+      getFoodForADay(data.dayId).then((foods) => {
+        setFoods(foods.map((food) => ({ letter: food.letter, name: food.name, selected: food.selected })));
+      })]
+    ).then(() => setSpinner(false));
   }, [data.dayId]);
 
 
@@ -90,6 +93,7 @@ export function DayFoodForm({ data, closeSheet }: TDayFoodFormProps) {
 
   return (
     <Form {...form}>
+      <Spinner show={spinner} />
       <form
         className="space-y-2 flex flex-col gap-6 w-full h-full"
       >

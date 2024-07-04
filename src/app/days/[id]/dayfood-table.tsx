@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button"
 import { Pizza } from "lucide-react"
 import { DayReportDialog } from "../day-report"
 import { groupDayFoodsByMeal } from "@/lib/utils"
+import { Spinner } from "@/components/Spinner"
 
 
 
@@ -29,6 +30,7 @@ export function DayFoodTable({ data, dayId }: { data: DayFood[], dayId: string }
   const [sheetOpen, setSheetOpen] = useState(false);
   const [dayFood, setDayFood] = useState<DayFood | null>(null);
   const [groupedData, setGroupedData] = useState<Record<string, DayFood[]>>({});
+  const [spinner, setSpinner] = useState(false);
   useEffect(() => {
     const groupedByMeal: Record<string, DayFood[]> = groupDayFoodsByMeal(data);
     setGroupedData(groupedByMeal);
@@ -88,6 +90,7 @@ export function DayFoodTable({ data, dayId }: { data: DayFood[], dayId: string }
 
   return (
     <div className="rounded-md border w-full flex flex-col">
+      <Spinner show={spinner} />
       <div className="w-full flex justify-between p-6">
         <Button onClick={createEmptyDayFood}>
           <Pizza className="mr-2" /> Додати їжу

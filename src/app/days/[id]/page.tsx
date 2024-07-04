@@ -23,9 +23,6 @@ const DayPage = async ({ params }: TDayPageProps) => {
     <div className='flex flex-col gap-4 w-full'>
       <section className='w-full'>
         <Card className='w-full'>
-          <CardHeader>
-            <CardTitle>Треба все записати</CardTitle>
-          </CardHeader>
           <CardContent>
             {day &&
               <DayForm
@@ -42,9 +39,8 @@ const DayPage = async ({ params }: TDayPageProps) => {
       <section className='w-full'>
         {/* <DayFoodForm data={} /> */}
         {day &&
-          <DayFoodTable data={day.dayFoods as DayFood[]} />
+          <DayFoodTable data={day.dayFoods as DayFood[]} dayId={params.id as string} />
         }
-
       </section>
       <Spacer />
       <Spacer />

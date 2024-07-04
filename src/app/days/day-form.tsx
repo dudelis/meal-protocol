@@ -15,9 +15,8 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { createDay, updateDay } from "@/actions/day"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
-import { Day } from "react-day-picker"
-import { DayFoodForm } from "./[id]/dayfood-form"
+import { Spacer } from "@/components/spacer"
+import { Save } from "lucide-react"
 
 const formSchema = z.object({
   order: z.coerce.number().min(1, "Номер дня має бути більше 0"),
@@ -61,7 +60,8 @@ export function DayForm(params: TDayFormProps) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-2">
+      >
+        <h3 className="py-4 text-2xl font-semibold leading-none tracking-tight text-center">Треба все записати</h3>
         <FormField
           control={form.control}
           name="order"
@@ -88,24 +88,11 @@ export function DayForm(params: TDayFormProps) {
             </FormItem>
           )}
         />
-        <div className="flex justify-between p-4">
-          <Button type="submit">Зберегти</Button>
-          {params.id &&
-            <DayFoodForm
-              data={{
-                id: "",
-                meal: "",
-                letter: "",
-                food: "",
-                userId: "",
-                createdAt: new Date(),
-                updatedAt: new Date(),
-                dayId: params.id
-              }}
-            >
-              <span className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2" >Додати їжу</span>
-            </DayFoodForm>
-          }
+        <Spacer />
+        <div className="flex justify-between py-4">
+          <Button type="submit" className="w-full">
+            <Save className="mr-2" />Зберегти
+          </Button>
         </div>
       </form>
     </Form>

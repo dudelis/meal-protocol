@@ -138,7 +138,6 @@ export function DataTable({ data }: { data: TMeal[] }) {
     useSensor(KeyboardSensor, {})
   )
   async function handleDragEnd(event: DragEndEvent) {
-    console.log('drag end', event);
     const { active, over } = event
     if (active && over && active.id !== over.id) {
       setMeals(meals => {

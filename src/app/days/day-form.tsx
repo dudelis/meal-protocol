@@ -45,7 +45,7 @@ export function DayForm(params: TDayFormProps) {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (params.id) {
       await updateDay({ id: params.id, ...values });
-      router.back();
+      // router.back();
     } else {
       const day = await createDay(values);
       router.push(`/days/${day.id}`)

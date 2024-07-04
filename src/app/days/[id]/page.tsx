@@ -2,10 +2,8 @@ import { redirect } from "next/navigation";
 import { getAuthSession } from "@/app/auth";
 import { getDayById } from "@/actions/day";
 import { DayForm } from "../day-form";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { DayFoodTable } from "./dayfood-table";
-import { DayFoodForm } from "./dayfood-form";
-import { Space } from "lucide-react";
 import { Spacer } from "@/components/spacer";
 import { DayFood } from "@prisma/client";
 
@@ -33,14 +31,9 @@ const DayPage = async ({ params }: TDayPageProps) => {
             }
           </CardContent>
         </Card>
-
-
       </section>
       <section className='w-full'>
-        {/* <DayFoodForm data={} /> */}
-        {day &&
-          <DayFoodTable data={day.dayFoods as DayFood[]} dayId={params.id as string} />
-        }
+        {day && <DayFoodTable data={day.dayFoods as DayFood[]} dayId={params.id as string} />}
       </section>
       <Spacer />
       <Spacer />

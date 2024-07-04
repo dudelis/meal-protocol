@@ -40,7 +40,6 @@ export function DayFoodTable({ data, dayId }: { data: DayFood[], dayId: string }
       return acc;
     }, {} as Record<string, DayFood[]>);
     setGroupedData(groupedByMeal);
-    console.log(groupedByMeal);
   }, [data, data.length]);
 
   const columns: ColumnDef<DayFood>[] = useMemo(() => {

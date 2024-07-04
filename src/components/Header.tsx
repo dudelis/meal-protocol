@@ -29,7 +29,6 @@ const Header = () => {
               Login
             </Link>
           )}
-          <UserIcon className="h-6 w-6" />
         </div>
       </div>
     </header>

@@ -15,7 +15,7 @@ const Header = () => {
     <header className="bg-gray-800 text-white p-4 fixed top-0 left-0 w-full">
       <div className="container mx-auto flex justify-between items-center">
         <Link href="/">
-          <h1 className="text-xl font-bold">Meal Protocol</h1>
+          <h1 className="text-xl font-bold">HealthTracker</h1>
         </Link>
         <div className="flex items-center space-x-4">
           {status === 'authenticated' ? (

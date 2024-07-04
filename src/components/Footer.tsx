@@ -8,9 +8,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { cn } from '@/lib/utils';
-import { useState } from 'react';
-
-const buttonClass = "rounded-[5px] cursor-pointer font-bold border-none text-center py-8 px-10 text-md "
+import FooterSettingsPopover from './FooterPopover';
 
 
 const navigateBack = (path: string) => {
@@ -34,21 +32,10 @@ const FooterMenu = () => {
         <Link href="/days" className="focus:outline-none w-[25%] flex justify-center hover:bg-popover h-[100%] items-center">
           <CalendarIcon className="h-6 w-6 text-gray-800 dark:text-white" />
         </Link>
-
-        <Popover>
-          <PopoverTrigger className="focus:outline-none w-[25%] flex justify-center hover:bg-popover h-[100%] items-center">
-            <CogIcon className="h-6 w-6 text-gray-800 dark:text-white" />
-          </PopoverTrigger>
-          <PopoverContent>
-            <div className='h-96 flex flex-col gap-16'>
-              <Link href="/settings/meals" className={cn(buttonClass, "bg-destructive")}>Прийоми їжі</Link>
-              <Link href="/settings/food" className={cn(buttonClass, "bg-destructive")}>Що можна їсти</Link>
-            </div>
-          </PopoverContent>
-        </Popover>
-        <Link href="/settings" className="focus:outline-none w-[25%] flex justify-center hover:bg-popover h-[100%] items-center">
+        <FooterSettingsPopover />
+        {/* <Link href="/settings" className="focus:outline-none w-[25%] flex justify-center hover:bg-popover h-[100%] items-center">
           <UserIcon className="h-6 w-6 text-gray-800 dark:text-white" />
-        </Link>
+        </Link> */}
       </div>
     </div>
   );

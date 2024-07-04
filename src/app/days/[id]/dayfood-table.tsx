@@ -2,23 +2,17 @@
 
 import {
   ColumnDef,
-  flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import {
   Table,
   TableBody,
   TableCell,
-  TableHead,
-  TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/solid"
-import { deleteDay } from "@/actions/day"
-import Link from "next/link"
-//import { DayDialog } from "./day-dialog"
+import { TrashIcon } from "@heroicons/react/24/solid"
 import { DayFood } from "@prisma/client";
 import { deleteDayFood } from "@/actions/dayfood"
 import { DayFoodForm } from "./dayfood-form"
@@ -92,7 +86,7 @@ export function DayFoodTable({ data, dayId }: { data: DayFood[], dayId: string }
       createdAt: new Date()
     } as DayFood);
     setSheetOpen(true);
-  }, [])
+  }, [dayId])
 
 
   const table = useReactTable({

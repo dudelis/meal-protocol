@@ -2,12 +2,6 @@
 import { ArrowLeftIcon, CalendarIcon, CogIcon, UserIcon } from '@heroicons/react/24/solid';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-import { cn } from '@/lib/utils';
 import FooterSettingsPopover from './FooterPopover';
 
 
@@ -33,9 +27,6 @@ const FooterMenu = () => {
           <CalendarIcon className="h-6 w-6 text-gray-800 dark:text-white" />
         </Link>
         <FooterSettingsPopover />
-        {/* <Link href="/settings" className="focus:outline-none w-[25%] flex justify-center hover:bg-popover h-[100%] items-center">
-          <UserIcon className="h-6 w-6 text-gray-800 dark:text-white" />
-        </Link> */}
       </div>
     </div>
   );

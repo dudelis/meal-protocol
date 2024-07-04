@@ -1,3 +1,4 @@
+import { Spacer } from "@/components/spacer";
 import Image from "next/image";
 
 
@@ -13,6 +14,8 @@ export default async function Home() {
         HealthTracker тут, щоб підтримувати вас на кожному кроці. Увійдіть, щоб розпочати свій шлях до здоровішого вас сьогодні!
       </p>
       {/* Add more components or content here as needed */}
+      <Spacer />
+      <Spacer />
     </div>
   );
 }

@@ -5,6 +5,7 @@ import { MealForm } from './meal-form';
 import { redirect } from 'next/navigation'
 import { getAuthSession } from '@/app/auth';
 import { getMeals } from '@/actions/meal';
+import { Spacer } from '@/components/spacer';
 
 
 const MealPage = async () => {
@@ -29,6 +30,8 @@ const MealPage = async () => {
       <section className='w-full'>
         <DataTable data={meals} />
       </section>
+      <Spacer />
+      <Spacer />
     </div>
 
   );

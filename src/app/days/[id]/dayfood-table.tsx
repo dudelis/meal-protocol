@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/table"
 import { TrashIcon } from "@heroicons/react/24/solid"
 import { DayFood } from "@prisma/client";
-import { deleteDayFood } from "@/actions/dayfood"
+import { deleteDayFood, getDayFoods } from "@/actions/dayfood"
 import { DayFoodForm } from "./dayfood-form"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { Button } from "@/components/ui/button"
@@ -22,21 +22,27 @@ import { Pizza } from "lucide-react"
 import { DayReportDialog } from "../day-report"
 import { groupDayFoodsByMeal } from "@/lib/utils"
 import { Spinner } from "@/components/Spinner"
+import { set } from "date-fns"
 
 
-
-
-export function DayFoodTable({ data, dayId }: { data: DayFood[], dayId: string }) {
+export function DayFoodTable({ dayId }: { dayId: string }) {
   const [sheetOpen, setSheetOpen] = useState(false);
   const [dayFood, setDayFood] = useState<DayFood | null>(null);
+  const [dayFoods, setDayFoods] = useState<DayFood[]>([]);
+  const [state, updateState] = useState<Date>(new Date());
   const [groupedData, setGroupedData] = useState<Record<string, DayFood[]>>({});
   const [spinner, setSpinner] = useState(false);
   useEffect(() => {
-    const groupedByMeal: Record<string, DayFood[]> = groupDayFoodsByMeal(data);
-    setGroupedData(groupedByMeal);
-  }, [data, data.length]);
+    setSpinner(true);
+    getDayFoods(dayId).then((dayFoods) => {
+      setDayFoods(dayFoods as DayFood[]);
+      const groupedByMeal: Record<string, DayFood[]> = groupDayFoodsByMeal(dayFoods);
+      setGroupedData(groupedByMeal);
+      setSpinner(false);
+    });
+  }, [dayId, sheetOpen, state]);
 
-  const columns: ColumnDef<DayFood>[] = useMemo(() => {
+  const columns: ColumnDef<DayFood, unknown>[] = useMemo(() => {
     return [
       {
         accessorKey: "letter",
@@ -59,7 +65,12 @@ export function DayFoodTable({ data, dayId }: { data: DayFood[], dayId: string }
         cell: ({ row }) => {
           return (
             <div className="flex gap-2 justify-end">
-              <button className="bg-destructive text-white p-2 rounded" onClick={async () => await deleteDayFood({ id: row.original.id })}>
+              <button className="bg-destructive text-white p-2 rounded" onClick={async () => {
+                console.log(new Date());
+                // await deleteDayFood({ id: row.original.id });
+                // updateState(new Date());
+              }
+              }>
                 <TrashIcon className="h-4 w-4" />
               </button>
             </div>
@@ -81,13 +92,6 @@ export function DayFoodTable({ data, dayId }: { data: DayFood[], dayId: string }
     setSheetOpen(true);
   }, [dayId])
 
-
-  const table = useReactTable({
-    data,
-    columns,
-    getCoreRowModel: getCoreRowModel()
-  });
-
   return (
     <div className="rounded-md border w-full flex flex-col">
       <Spinner show={spinner} />
@@ -108,7 +112,7 @@ export function DayFoodTable({ data, dayId }: { data: DayFood[], dayId: string }
       </Sheet >
       <Table>
         <TableBody>
-          {table.getRowModel().rows?.length ? (
+          {dayFoods.length ? (
             Object.keys(groupedData).map((key) => (
               <>
                 <TableRow key={key}>
@@ -116,7 +120,6 @@ export function DayFoodTable({ data, dayId }: { data: DayFood[], dayId: string }
                     <span className="text-lg font-bold">{key}</span>
                   </TableCell>
                 </TableRow>
-
                 {groupedData[key].map((row: DayFood) => {
                   return (
                     <TableRow key={row.id} data-state={row.id === dayFood?.id ? "selected" : ""}>
@@ -132,12 +135,15 @@ export function DayFoodTable({ data, dayId }: { data: DayFood[], dayId: string }
                         <div className="flex gap-2 justify-end">
                           <button
                             className="bg-destructive text-white p-2 rounded"
-                            onClick={async () => await deleteDayFood({ id: row.id })}>
+                            onClick={async () => {
+                              await deleteDayFood({ id: row.id });
+                              updateState(new Date());
+                            }}>
                             <TrashIcon className="h-4 w-4" />
                           </button>
                         </div>
                       </TableCell>
-                    </TableRow>
+                    </TableRow >
                   )
                 })
                 }
@@ -152,6 +158,6 @@ export function DayFoodTable({ data, dayId }: { data: DayFood[], dayId: string }
           )}
         </TableBody>
       </Table>
-    </div>
+    </div >
   )
 }

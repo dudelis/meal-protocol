@@ -1,9 +1,7 @@
 import { Spacer } from "@/components/spacer";
 import Image from "next/image";
 
-
 export default async function Home() {
-
 
   return (
     <div className="w-full bg-muted p-4">
@@ -13,7 +11,6 @@ export default async function Home() {
         Якщо ви прагнете підтримувати здоровий спосіб життя, схуднути або просто контролювати свої харчові звички,
         HealthTracker тут, щоб підтримувати вас на кожному кроці. Увійдіть, щоб розпочати свій шлях до здоровішого вас сьогодні!
       </p>
-      {/* Add more components or content here as needed */}
       <Spacer />
       <Spacer />
     </div>

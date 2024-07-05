@@ -11,7 +11,7 @@ export async function getDayFoods(dayId: string) {
   });
   const sortedArray = dayFoods.sort((a, b) =>
     // a.letter.localeCompare(b.letter, "uk", { sensitivity: "accent" })
-    a.updatedAt > b.updatedAt ? -1 : 1
+    a.createdAt > b.createdAt ? 1 : -1
   );
   return sortedArray;
 }

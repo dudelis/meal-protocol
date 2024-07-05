@@ -17,6 +17,8 @@ import { createDay, updateDay } from "@/actions/day"
 import { useRouter } from "next/navigation"
 import { Spacer } from "@/components/spacer"
 import { Save } from "lucide-react"
+import { Spinner } from "@/components/Spinner"
+import { useState } from "react"
 
 const formSchema = z.object({
   order: z.coerce.number().min(1, "Номер дня має бути більше 0"),
@@ -31,6 +33,7 @@ export type TDayFormProps = {
 
 export function DayForm(params: TDayFormProps) {
   const router = useRouter();
+  const [spinner, setSpinner] = useState(false);
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -43,6 +46,7 @@ export function DayForm(params: TDayFormProps) {
   // 2. Define a submit handler.
   // // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    setSpinner(true);
     if (params.id) {
       await updateDay({ id: params.id, ...values });
       // router.back();
@@ -50,52 +54,56 @@ export function DayForm(params: TDayFormProps) {
       const day = await createDay(values);
       router.push(`/days/${day.id}`)
     }
-    form.reset({
-      order: 0,
-      sportActivity: ""
-    });
+    setSpinner(false);
+    // form.reset({
+    //   order: 0,
+    //   sportActivity: ""
+    // });
   }
 
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-      >
-        <h3 className="py-4 text-2xl font-semibold leading-none tracking-tight text-center">Треба все записати</h3>
-        <FormField
-          control={form.control}
-          name="order"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Номер дня?</FormLabel>
-              <FormControl>
-                <Input type="number" placeholder="" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="sportActivity"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Як щодо спорту?</FormLabel>
-              <FormControl>
-                <Textarea placeholder="" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Spacer />
-        <div className="flex justify-between py-4">
-          <Button type="submit" className="w-full">
-            <Save className="mr-2" />Зберегти
-          </Button>
-        </div>
-      </form>
-    </Form>
+    <>
+      <Spinner show={spinner} />
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+        >
+          <h3 className="py-4 text-2xl font-semibold leading-none tracking-tight text-center">Треба все записати</h3>
+          <FormField
+            control={form.control}
+            name="order"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Номер дня?</FormLabel>
+                <FormControl>
+                  <Input type="number" placeholder="" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="sportActivity"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Як щодо спорту?</FormLabel>
+                <FormControl>
+                  <Textarea placeholder="" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Spacer />
+          <div className="flex justify-between py-4">
+            <Button type="submit" className="w-full">
+              <Save className="mr-2" />Зберегти
+            </Button>
+          </div>
+        </form>
+      </Form>
+    </>
   )
 
 }

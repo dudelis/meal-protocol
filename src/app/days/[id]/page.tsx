@@ -33,7 +33,7 @@ const DayPage = async ({ params }: TDayPageProps) => {
         </Card>
       </section>
       <section className='w-full'>
-        {day && <DayFoodTable data={day.dayFoods as DayFood[]} dayId={params.id as string} />}
+        {day && <DayFoodTable dayId={params.id as string} />}
       </section>
       <Spacer />
       <Spacer />

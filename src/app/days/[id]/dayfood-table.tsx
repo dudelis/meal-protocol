@@ -67,8 +67,7 @@ export function DayFoodTable({ dayId }: { dayId: string }) {
             <div className="flex gap-2 justify-end">
               <button className="bg-destructive text-white p-2 rounded" onClick={async () => {
                 console.log(new Date());
-                // await deleteDayFood({ id: row.original.id });
-                // updateState(new Date());
+                await deleteDayFood({ id: row.original.id });
               }
               }>
                 <TrashIcon className="h-4 w-4" />
@@ -136,6 +135,7 @@ export function DayFoodTable({ dayId }: { dayId: string }) {
                           <button
                             className="bg-destructive text-white p-2 rounded"
                             onClick={async () => {
+                              setSpinner(true);
                               await deleteDayFood({ id: row.id });
                               updateState(new Date());
                             }}>

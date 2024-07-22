@@ -22,7 +22,6 @@ import { Pizza } from "lucide-react"
 import { DayReportDialog } from "../day-report"
 import { groupDayFoodsByMeal } from "@/lib/utils"
 import { Spinner } from "@/components/Spinner"
-import { set } from "date-fns"
 
 
 export function DayFoodTable({ dayId }: { dayId: string }) {
@@ -40,7 +39,7 @@ export function DayFoodTable({ dayId }: { dayId: string }) {
       setGroupedData(groupedByMeal);
       setSpinner(false);
     });
-  }, [dayId, sheetOpen, state]);
+  }, [dayId, state]);
 
   const columns: ColumnDef<DayFood, unknown>[] = useMemo(() => {
     return [
@@ -106,7 +105,13 @@ export function DayFoodTable({ dayId }: { dayId: string }) {
           <SheetHeader>
             <SheetTitle>Що з&apos;їв - записуй!</SheetTitle>
           </SheetHeader>
-          <DayFoodForm data={dayFood as DayFood} closeSheet={() => setSheetOpen(false)} />
+          <DayFoodForm
+            data={dayFood as DayFood}
+            closeSheet={() => setSheetOpen(false)}
+            closeRefresh={() => {
+              setSheetOpen(false);
+              updateState(new Date());
+            }} />
         </SheetContent>
       </Sheet >
       <Table>

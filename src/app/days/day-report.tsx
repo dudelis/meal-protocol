@@ -26,7 +26,12 @@ export const DayReportDialog = ({ dayId }: { dayId: string }) => {
   const [dayFoods, setDayFoods] = useState<Record<string, DayFood[]>>({});
   const [report, setReport] = useState<string | null>(null);
 
+
+
+
+
   useEffect(() => {
+    if (!open) return;
     getDayById({ id: dayId }).then((day) => {
       setDay(day as TDayWithDayFoods);
       if (day) {
@@ -52,7 +57,7 @@ export const DayReportDialog = ({ dayId }: { dayId: string }) => {
     return () => {
       // Cleanup logic here if needed
     };
-  }, [open, dayId]);
+  }, [open, dayId, dayFoods.length]);
 
   return (
     <Dialog open={open} onOpenChange={() => setOpen(!open)}>

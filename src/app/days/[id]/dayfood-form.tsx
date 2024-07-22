@@ -39,15 +39,15 @@ const formSchema = z.object({
 export type TDayFoodFormProps = {
   data: DayFood;
   closeSheet: () => void;
+  closeRefresh: () => void;
 }
 
-export function DayFoodForm({ data, closeSheet }: TDayFoodFormProps) {
+export function DayFoodForm({ data, closeSheet, closeRefresh }: TDayFoodFormProps) {
   const [meals, setMeals] = useState<string[]>([]);
   const [foods, setFoods] = useState<{ letter: string, name: string, selected: boolean }[]>([]);
   const [spinner, setSpinner] = useState(false);
 
-
-  const requestData = useCallback(() => {
+  useEffect(() => {
     setSpinner(true);
     Promise.all([
       getMeals().then((meals) => setMeals(meals.map((meal) => meal.name))),
@@ -56,9 +56,6 @@ export function DayFoodForm({ data, closeSheet }: TDayFoodFormProps) {
       })]
     ).then(() => setSpinner(false));
   }, [data.dayId]);
-
-
-  useEffect(() => requestData(), [requestData]);
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -71,8 +68,7 @@ export function DayFoodForm({ data, closeSheet }: TDayFoodFormProps) {
     mode: "all",
   });
 
-  // 2. Define a submit handler.
-  // // 2. Define a submit handler.
+
   async function handleSubmit() {
     await form.trigger();
     if (!form.formState.isValid) return;
@@ -87,8 +83,7 @@ export function DayFoodForm({ data, closeSheet }: TDayFoodFormProps) {
       food: "",
       meal: values.meal,
     });
-    closeSheet();
-    requestData();
+    closeRefresh();
   }
 
   return (
@@ -168,7 +163,6 @@ export function DayFoodForm({ data, closeSheet }: TDayFoodFormProps) {
           <Button type="button" onClick={() => handleSubmit()}>Зберегти</Button>
           <Button variant="destructive" type="button" onClick={() => closeSheet()}>Скасувати</Button>
         </div>
-
       </form>
     </Form>
 

@@ -43,7 +43,6 @@ export function DayTable({ data }: { data: TDay[] }) {
         return (
           <div className="flex gap-2 justify-start w-full">
             <button onClick={() => {
-              setSpinner(true);
               router.push(`/days/${row.original.id}`)
             }}
               className="w-full  p-4 text-left">

@@ -159,7 +159,7 @@ export function DayFoodForm({ data, closeSheet, closeRefresh }: TDayFoodFormProp
             </FormItem>
           )}
         />
-        <div className="flex flex-col justify-between h-full py-12">
+        <div className="flex flex-col justify-between h-full pb-8">
           <Button type="button" onClick={() => handleSubmit()}>Зберегти</Button>
           <Button variant="destructive" type="button" onClick={() => closeSheet()}>Скасувати</Button>
         </div>

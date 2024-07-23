@@ -23,19 +23,16 @@ export type TDayWithDayFoods = Prisma.DayGetPayload<{ include: { dayFoods: true 
 export const DayReportDialog = ({ dayId }: { dayId: string }) => {
   const [open, setOpen] = useState(false);
   const [day, setDay] = useState<TDayWithDayFoods | null>(null);
-  const [dayFoods, setDayFoods] = useState<Record<string, DayFood[]>>({});
+  // const [dayFoods, setDayFoods] = useState<Record<string, DayFood[]>>({});
   const [report, setReport] = useState<string | null>(null);
-
-
-
-
 
   useEffect(() => {
     if (!open) return;
     getDayById({ id: dayId }).then((day) => {
       setDay(day as TDayWithDayFoods);
       if (day) {
-        setDayFoods(groupDayFoodsByMeal(day.dayFoods));
+        //setDayFoods(groupDayFoodsByMeal(day.dayFoods));
+        const dayFoods = groupDayFoodsByMeal(day.dayFoods);
         setReport(
           `День ${day.order} ${String.fromCharCode(13)}` +
           `${Object.keys(dayFoods).map((key) => {
@@ -57,7 +54,7 @@ export const DayReportDialog = ({ dayId }: { dayId: string }) => {
     return () => {
       // Cleanup logic here if needed
     };
-  }, [open, dayId, dayFoods.length]);
+  }, [open, dayId]);
 
   return (
     <Dialog open={open} onOpenChange={() => setOpen(!open)}>

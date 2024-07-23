@@ -15,8 +15,9 @@ const Header = () => {
     <header className="bg-gray-800 text-white p-4 fixed top-0 left-0 w-full z-50">
       <div className="container flex mx-auto justify-between items-center gap-4">
         {theme === 'dark'
-          ? <button onClick={() => setTheme("light")}> <Sun /></button>
-          : <button onClick={() => setTheme("dark")}><Moon /></button>}
+          ? <Sun onClick={() => setTheme("light")} />
+          : <Moon onClick={() => setTheme("dark")} />
+        }
         <Link href="/">
           <h1 className="text-xl font-bold text-center">Health Tracker</h1>
         </Link>
